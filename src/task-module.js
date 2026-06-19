@@ -21,8 +21,11 @@ export class Task {
 
 //Object.assign(Task.prototype, taskMethodPriority); 
 
+
 export const addTaskToArray = function(task){
-    return arrOfTasks.push(task);
+    const addTaskToArray = arrOfTasks.push(task);
 }
 
 export const arrOfTasks = [];
+
+

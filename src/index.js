@@ -1,5 +1,5 @@
 import "./styles.css";
-import {greeting, Task, addTaskToArray, arrOfTasks} from "./module-1.js";
+import {greeting, Task, addTaskToArray, arrOfTasks} from "./task-module.js";
 
 console.log(greeting);
 
@@ -18,7 +18,6 @@ taskButton.addEventListener("click", () => addTaskToArray());*/
 
 console.log(firstTask);
 
-//debugger;
 console.log(firstTask.sayPriority());
 
 addTaskToArray(firstTask);
@@ -26,22 +25,21 @@ addTaskToArray(secondTask);
 
 console.log(arrOfTasks);
 
-const form = document.getElementById("form");
+const taskForm = document.getElementById("task-form");
 const taskTitle = document.getElementById("task-title");
 const taskDescription = document.getElementById("task-description");
 const taskNotes = document.getElementById("task-notes");
 const taskDueDate = document.getElementById("task-due-date");
 const taskPriority = document.getElementById("task-priority");
-const submitButton = document.getElementById("submit");
+const taskSubmitButton = document.getElementById("task-submit");
 
-form.addEventListener("submit", (event) => {
+/*taskForm.addEventListener("submit", (event) => {
     event.preventDefault();
-    console.log(taskTitle.value)
     const newTask = new Task(taskTitle.value, taskDescription.value, taskNotes.value, taskDueDate.value, taskPriority.value);
     console.log(newTask);
     addTaskToArray(newTask);
-   console.log(arrOfTasks);
-})
+    taskForm.reset();
+})*/
 
 
 const getArr = arrOfTasks[1].sayPriority(); //useful for using methods within task Array of task class objects!
@@ -49,4 +47,87 @@ const getArr = arrOfTasks[1].sayPriority(); //useful for using methods within ta
 console.log(getArr);
 
 console.log(arrOfTasks[1].notes);
+
+class Project {
+    constructor(project, arrOfProjectTasks = []){
+        this.project = project;
+        this.projectTasks = [...arrOfProjectTasks];
+    }
+
+    addTasks(tasks){
+        this.projectTasks.push(tasks);
+    }
+}
+
+const projectOne = new Project("Coding");
+
+
+projectOne.addTasks(firstTask);
+projectOne.addTasks(secondTask);
+
+
+console.log(projectOne);
+
+const projectForm = document.getElementById("project-form");
+const projectTitle = document.getElementById("project-title");
+const projectSubmitButton = document.getElementById("project-submit");
+
+/*projectForm.addEventListener("submit",(event) => {
+    event.preventDefault();
+    processNewProject(projectTitle.value);
+    projectForm.reset();
+});*/
+
+//Trying to figure out how to add tasks to projects when made
+
+function handleEvents(){
+
+    projectForm.addEventListener("submit",(event) => {
+        event.preventDefault();
+        processNewProject(projectTitle.value);
+        projectForm.reset();
+
+    });
+
+    taskForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const newTask = new Task(taskTitle.value, taskDescription.value, taskNotes.value, taskDueDate.value, taskPriority.value);
+        console.log(newTask);
+        addTaskToArray(newTask);
+        newProject.addTasks(newTask);
+        taskForm.reset();
+    })
+
+    let newProject;
+
+    function processNewProject(projectTitleValue){
+        newProject = new Project(projectTitleValue);
+        console.log(newProject);
+        return newProject
+    }
+
+    function appendTaskToProject(project, append){
+        return project.addTasks(append);
+    }
+
+    const yolo = processNewProject("yolo");
+    appendTaskToProject(yolo, firstTask);
+
+}
+
+handleEvents();
+
+/*function processNewProject(projectTitleValue){
+    const newProject = new Project(projectTitleValue);
+    console.log(newProject);
+    return newProject
+}
+
+const yolo = processNewProject("yolo");
+
+function appendTaskToProject(project, append){
+    return project.addTasks(append);
+}
+
+appendTaskToProject(yolo, firstTask);*/
 
