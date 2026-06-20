@@ -33,30 +33,29 @@ const taskDueDate = document.getElementById("task-due-date");
 const taskPriority = document.getElementById("task-priority");
 const taskSubmitButton = document.getElementById("task-submit");
 
-/*taskForm.addEventListener("submit", (event) => {
-    event.preventDefault();
-    const newTask = new Task(taskTitle.value, taskDescription.value, taskNotes.value, taskDueDate.value, taskPriority.value);
-    console.log(newTask);
-    addTaskToArray(newTask);
-    taskForm.reset();
-})*/
-
-
 const getArr = arrOfTasks[1].sayPriority(); //useful for using methods within task Array of task class objects!
                                       
 console.log(getArr);
 
 console.log(arrOfTasks[1].notes);
 
+const arrOfProjects = [];
+
 class Project {
     constructor(project, arrOfProjectTasks = []){
         this.project = project;
         this.projectTasks = [...arrOfProjectTasks];
+        this.id = crypto.randomUUID();
     }
 
     addTasks(tasks){
         this.projectTasks.push(tasks);
     }
+}
+
+Project.prototype.displayProject = function(){
+    const projectStringValue = this.project;
+    return projectStringValue
 }
 
 const projectOne = new Project("Coding");
@@ -72,62 +71,73 @@ const projectForm = document.getElementById("project-form");
 const projectTitle = document.getElementById("project-title");
 const projectSubmitButton = document.getElementById("project-submit");
 
-/*projectForm.addEventListener("submit",(event) => {
+const projectDisplay = document.getElementById("display-project");
+const taskDisplay = document.getElementById("display-task");
+
+console.log(projectDisplay);
+console.log(taskDisplay);
+
+
+//Trying to figure out how to add tasks to projects when made
+// and how to get and set values from one event listener to the other
+let newProject;
+
+projectForm.addEventListener("submit",(event) => {
     event.preventDefault();
     processNewProject(projectTitle.value);
     projectForm.reset();
-});*/
 
-//Trying to figure out how to add tasks to projects when made
+});
 
-function handleEvents(){
+taskForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const newTask = new Task(taskTitle.value, taskDescription.value, taskNotes.value, taskDueDate.value, taskPriority.value);
+    addTaskToArray(newTask);
+    appendTaskIdToProject(newTask, newProject);
+    newProject.addTasks(newTask);
+    taskForm.reset();
+    console.log(newProject); //logs adding project id to task id so both match
+})
 
-    projectForm.addEventListener("submit",(event) => {
-        event.preventDefault();
-        processNewProject(projectTitle.value);
-        projectForm.reset();
+function processNewProject(projectTitleValue){
+    newProject = new Project(projectTitleValue);
+    projectDisplay.textContent = projectTitleValue;
+    console.log(newProject); //logs new project being made
+    return newProject;
+}
 
-    });
+function appendTaskIdToProject(task, project){
+    //projectDisplay.textContent = projectName;
+    taskDisplay.textContent = "heyy";
 
-    taskForm.addEventListener("submit", (event) => {
-        event.preventDefault();
-        const newTask = new Task(taskTitle.value, taskDescription.value, taskNotes.value, taskDueDate.value, taskPriority.value);
-        console.log(newTask);
-        addTaskToArray(newTask);
-        newProject.addTasks(newTask);
-        taskForm.reset();
+    task.id = project.id;
+    console.log(task.title);
+    console.log(task.description);
+    console.log(task.notes);
+    console.log(task.dueDate);
+    console.log(task.priority);
+    console.log(task.id);
+    console.log(arrOfTasks)
+    console.log(arrOfProjects);
+
+    arrOfTasks.forEach(element => {
+        //console.log(element.id);
+
+        if (element.id === project.id){
+        console.log(element.id);
+        console.log(project.id);
+    
+
+        } else {
+            console.log("false!"); //runs false twice because first two elements in array
+                                   //do not have assigned ids!
+        }
     })
-
-    let newProject;
-
-    function processNewProject(projectTitleValue){
-        newProject = new Project(projectTitleValue);
-        console.log(newProject);
-        return newProject
-    }
-
-    function appendTaskToProject(project, append){
-        return project.addTasks(append);
-    }
-
-    const yolo = processNewProject("yolo");
-    appendTaskToProject(yolo, firstTask);
-
 }
 
-handleEvents();
+projectDisplay.textContent = "nice";
 
-/*function processNewProject(projectTitleValue){
-    const newProject = new Project(projectTitleValue);
-    console.log(newProject);
-    return newProject
-}
 
-const yolo = processNewProject("yolo");
 
-function appendTaskToProject(project, append){
-    return project.addTasks(append);
-}
 
-appendTaskToProject(yolo, firstTask);*/
 

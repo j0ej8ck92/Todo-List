@@ -3,3 +3,7 @@ body {
   background-color: rgb(11, 150, 185);
 }
 
+#display-project, #display-task{
+  text-align: center;
+  margin-top: 3em;
+}

@@ -2,12 +2,13 @@ export const greeting = "Hello Odinite!";
 
 
 export class Task {
-    constructor(title, description, notes, dueDate, priority){
+    constructor(title, description, notes, dueDate, priority, id){
         this.title = title;
         this.description = description;
         this.notes = notes;
         this.dueDate = dueDate;
         this.priority = priority;
+        this.id = id;
     }
 }
 
@@ -24,6 +25,7 @@ export class Task {
 
 export const addTaskToArray = function(task){
     const addTaskToArray = arrOfTasks.push(task);
+    return addTaskToArray;
 }
 
 export const arrOfTasks = [];
