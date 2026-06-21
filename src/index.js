@@ -1,5 +1,6 @@
 import "./styles.css";
-import {greeting, Task, addTaskToArray, arrOfTasks} from "./task-module.js";
+import {greeting, Task, createTaskDisplay, addTaskToArray, arrOfTasks} from "./task-module.js";
+import {Project, createNewProject, createProjectDisplay, setActiveProject, activeProjectId, arrOfProjects} from "./project-module.js";
 
 console.log(greeting);
 
@@ -32,25 +33,6 @@ console.log(getArr);
 
 console.log(arrOfTasks[1].notes);
 
-const arrOfProjects = [];
-
-class Project {
-    constructor(project, arrOfProjectTasks = []){
-        this.project = project;
-        this.projectTasks = [...arrOfProjectTasks];
-        this.id = crypto.randomUUID();
-    }
-
-    addTasks(tasks){
-        this.projectTasks.push(tasks);
-    }
-}
-
-Project.prototype.displayProject = function(){
-    const projectStringValue = this.project;
-    return projectStringValue
-}
-
 const projectOne = new Project("Coding");
 
 arrOfProjects.push(projectOne);
@@ -64,16 +46,7 @@ const projectForm = document.getElementById("project-form");
 const projectTitle = document.getElementById("project-title");
 const projectSubmitButton = document.getElementById("project-submit");
 
-const projectDisplay = document.getElementById("display-project");
-const taskDisplay = document.getElementById("display-task");
 
-console.log(projectDisplay);
-console.log(taskDisplay);
-
-
-//Trying to figure out how to add tasks to projects when made
-// and how to get and set values from one event listener to the other
-let newProject;
 
 projectForm.addEventListener("submit",(event) => {
     event.preventDefault();
@@ -84,115 +57,34 @@ projectForm.addEventListener("submit",(event) => {
 
 taskForm.addEventListener("submit", (event) => {
     event.preventDefault();
-    const newTask = new Task(taskTitle.value, taskDescription.value, taskNotes.value, taskDueDate.value, taskPriority.value);
-    addTaskToArray(newTask);
-    appendTaskToProject(newTask, newProject);
-    newProject.addTasks(newTask);
-    taskForm.reset();
-    console.log(newProject); //logs adding project id to task id so both match
-})
 
-function createNewProject(projectTitleValue){
-    newProject = new Project(projectTitleValue);
-    createProjectDisplay(projectTitleValue, newProject.id);
-    arrOfProjects.push(newProject);
-    console.log(arrOfProjects); //logs new projects being made
-
-    arrOfProjects.forEach(project => {
-    console.log(project);
-    })
-
-    return newProject;
-}
-
-function appendTaskToProject(task, project){
-    //projectDisplay.textContent = projectName;
-    //taskDisplay.textContent = "heyy";
-
-    task.id = project.id;
-    console.log(task.title);
-    console.log(task.description);
-    console.log(task.notes);
-    console.log(task.dueDate);
-    console.log(task.priority);
-    console.log(task.id);
-    console.log(arrOfTasks)
-    console.log(arrOfProjects);
-
-    if (task.id === project.id){
-
-        createTaskDisplay(task.title, task.description, task.notes, task.dueDate, task.priority, task.id);
-
-    } else {
-        console.log("false!");
+    if (!activeProjectId) {
+        alert("Select a project first");
+        return;
     }
 
-}
+    const project = arrOfProjects.find((proj) => proj.id === activeProjectId);
+    const newTask = new Task(taskTitle.value, taskDescription.value, taskNotes.value, taskDueDate.value, taskPriority.value);
+    newTask.id = crypto.randomUUID();
+    newTask.projectId = project.id;
+
+    addTaskToArray(newTask);
+    project.addTasks(newTask);
+    createTaskDisplay(newTask);
+    taskForm.reset();
+})
 
 
 
-//Get Values of Tasks and display them 
+//firstTask.id = crypto.randomUUID(); 
+firstTask.projectId = projectOne.id;
+//secondTask.id = crypto.randomUUID();
+secondTask.projectId = projectOne.id;
 
-
-function createTaskDisplay(title, description, notes, dueDate, priority, id){
-
-    const taskDisplayContainer = document.createElement("div");
-    taskDisplayContainer.classList.add("task-display-container");
-    taskDisplayContainer.id = id;
-    taskDisplay.append(taskDisplayContainer);
-    
-
-    const taskTitleDisplay = document.createElement("div");
-    taskTitleDisplay.classList.add("title-value");
-    taskDisplayContainer.append(taskTitleDisplay);
-    taskTitleDisplay.textContent = title;
-    
-    const taskDescriptionDisplay = document.createElement("div");
-    taskDescriptionDisplay.classList.add("description-value");
-    taskDisplayContainer.append(taskDescriptionDisplay);
-    taskDescriptionDisplay.textContent = description;
-
-    const taskNotesDisplay = document.createElement("div");
-    taskNotesDisplay.classList.add("notes-value");
-    taskDisplayContainer.append(taskNotesDisplay);
-    taskNotesDisplay.textContent = notes;
-
-    const taskDueDateDisplay = document.createElement("div");
-    taskDueDateDisplay.classList.add("due-date-value");
-    taskDisplayContainer.append(taskDueDateDisplay);
-    taskDueDateDisplay.textContent = dueDate;
-
-    const taskPriorityDisplay = document.createElement("div");
-    taskDescriptionDisplay.classList.add("priority-value");
-    taskDisplayContainer.append(taskPriorityDisplay);
-    taskPriorityDisplay.textContent = priority;
-
-    taskDisplayContainer.addEventListener("click", (event) => {
-        console.log(event.target);
-    })
-
-    
-}
-
-function createProjectDisplay(project, id){
-
-    const projectDisplayContainer = document.createElement("div");
-    projectDisplayContainer.classList.add("project-display-container");
-    projectDisplay.append(projectDisplayContainer);
-
-    const projectTitleDisplay = document.createElement("div");
-    projectTitleDisplay.classList.add("project-title-value");
-    projectDisplayContainer.append(projectTitleDisplay);
-    projectTitleDisplay.dataset.id = id;
-    projectTitleDisplay.textContent = project;
-
-    projectDisplayContainer.addEventListener("click", (event) => {
-        console.log(event.target);
-        
-    })
-
-
-}
+createProjectDisplay(projectOne.project, projectOne.id);
+createTaskDisplay(firstTask);
+createTaskDisplay(secondTask);
+setActiveProject(projectOne.id);
 
 
 
