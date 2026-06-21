@@ -3,7 +3,17 @@ body {
   background-color: rgb(11, 150, 185);
 }
 
+.wrapper{
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-rows: repeat(6, minmax(0, 1fr));
+}
+
 #display-project, #display-task{
   text-align: center;
   margin-top: 3em;
 }
+
+
+

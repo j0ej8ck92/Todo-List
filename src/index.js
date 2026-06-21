@@ -3,17 +3,9 @@ import {greeting, Task, addTaskToArray, arrOfTasks} from "./task-module.js";
 
 console.log(greeting);
 
-
 const firstTask = new Task("run", "three miles", "under 25 mins", "June 4, 2026", "medium");
-
 const secondTask = new Task("jog", "four miles", "under 50 mins", "June 18, 2026", "high");
-
-
-/*const taskButton = document.querySelector(".add-task");
-
-console.log(taskButton);
-
-taskButton.addEventListener("click", () => addTaskToArray());*/
+const thirdTask = new Task("walk", "ten miles", "under 6 hours", "July 10, 2026", "mild");
 
 
 console.log(firstTask);
@@ -22,6 +14,7 @@ console.log(firstTask.sayPriority());
 
 addTaskToArray(firstTask);
 addTaskToArray(secondTask);
+addTaskToArray(thirdTask);
 
 console.log(arrOfTasks);
 
@@ -60,11 +53,11 @@ Project.prototype.displayProject = function(){
 
 const projectOne = new Project("Coding");
 
-
+arrOfProjects.push(projectOne);
 projectOne.addTasks(firstTask);
 projectOne.addTasks(secondTask);
 
-
+console.log(arrOfProjects);
 console.log(projectOne);
 
 const projectForm = document.getElementById("project-form");
@@ -84,7 +77,7 @@ let newProject;
 
 projectForm.addEventListener("submit",(event) => {
     event.preventDefault();
-    processNewProject(projectTitle.value);
+    createNewProject(projectTitle.value);
     projectForm.reset();
 
 });
@@ -93,22 +86,28 @@ taskForm.addEventListener("submit", (event) => {
     event.preventDefault();
     const newTask = new Task(taskTitle.value, taskDescription.value, taskNotes.value, taskDueDate.value, taskPriority.value);
     addTaskToArray(newTask);
-    appendTaskIdToProject(newTask, newProject);
+    appendTaskToProject(newTask, newProject);
     newProject.addTasks(newTask);
     taskForm.reset();
     console.log(newProject); //logs adding project id to task id so both match
 })
 
-function processNewProject(projectTitleValue){
+function createNewProject(projectTitleValue){
     newProject = new Project(projectTitleValue);
-    projectDisplay.textContent = projectTitleValue;
-    console.log(newProject); //logs new project being made
+    createProjectDisplay(projectTitleValue, newProject.id);
+    arrOfProjects.push(newProject);
+    console.log(arrOfProjects); //logs new projects being made
+
+    arrOfProjects.forEach(project => {
+    console.log(project);
+    })
+
     return newProject;
 }
 
-function appendTaskIdToProject(task, project){
+function appendTaskToProject(task, project){
     //projectDisplay.textContent = projectName;
-    taskDisplay.textContent = "heyy";
+    //taskDisplay.textContent = "heyy";
 
     task.id = project.id;
     console.log(task.title);
@@ -120,22 +119,87 @@ function appendTaskIdToProject(task, project){
     console.log(arrOfTasks)
     console.log(arrOfProjects);
 
-    arrOfTasks.forEach(element => {
-        //console.log(element.id);
+    if (task.id === project.id){
 
-        if (element.id === project.id){
-        console.log(element.id);
-        console.log(project.id);
-    
+        createTaskDisplay(task.title, task.description, task.notes, task.dueDate, task.priority, task.id);
 
-        } else {
-            console.log("false!"); //runs false twice because first two elements in array
-                                   //do not have assigned ids!
-        }
-    })
+    } else {
+        console.log("false!");
+    }
+
 }
 
-projectDisplay.textContent = "nice";
+
+
+//Get Values of Tasks and display them 
+
+
+function createTaskDisplay(title, description, notes, dueDate, priority, id){
+
+    const taskDisplayContainer = document.createElement("div");
+    taskDisplayContainer.classList.add("task-display-container");
+    taskDisplayContainer.id = id;
+    taskDisplay.append(taskDisplayContainer);
+    
+
+    const taskTitleDisplay = document.createElement("div");
+    taskTitleDisplay.classList.add("title-value");
+    taskDisplayContainer.append(taskTitleDisplay);
+    taskTitleDisplay.textContent = title;
+    
+    const taskDescriptionDisplay = document.createElement("div");
+    taskDescriptionDisplay.classList.add("description-value");
+    taskDisplayContainer.append(taskDescriptionDisplay);
+    taskDescriptionDisplay.textContent = description;
+
+    const taskNotesDisplay = document.createElement("div");
+    taskNotesDisplay.classList.add("notes-value");
+    taskDisplayContainer.append(taskNotesDisplay);
+    taskNotesDisplay.textContent = notes;
+
+    const taskDueDateDisplay = document.createElement("div");
+    taskDueDateDisplay.classList.add("due-date-value");
+    taskDisplayContainer.append(taskDueDateDisplay);
+    taskDueDateDisplay.textContent = dueDate;
+
+    const taskPriorityDisplay = document.createElement("div");
+    taskDescriptionDisplay.classList.add("priority-value");
+    taskDisplayContainer.append(taskPriorityDisplay);
+    taskPriorityDisplay.textContent = priority;
+
+    taskDisplayContainer.addEventListener("click", (event) => {
+        console.log(event.target);
+    })
+
+    
+}
+
+function createProjectDisplay(project, id){
+
+    const projectDisplayContainer = document.createElement("div");
+    projectDisplayContainer.classList.add("project-display-container");
+    projectDisplay.append(projectDisplayContainer);
+
+    const projectTitleDisplay = document.createElement("div");
+    projectTitleDisplay.classList.add("project-title-value");
+    projectDisplayContainer.append(projectTitleDisplay);
+    projectTitleDisplay.dataset.id = id;
+    projectTitleDisplay.textContent = project;
+
+    projectDisplayContainer.addEventListener("click", (event) => {
+        console.log(event.target);
+        
+    })
+
+
+}
+
+
+
+
+
+
+
 
 
 
