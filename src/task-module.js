@@ -25,23 +25,22 @@ export class Task {
 
 //Object.assign(Task.prototype, taskMethodPriority); 
 
+export const arrOfTasks = [];
 
 export const addTaskToArray = function(task){
     const addTaskToArray = arrOfTasks.push(task);
     return addTaskToArray;
 }
 
-export const arrOfTasks = [];
-
 const taskDisplay = document.getElementById("display-task");
 
 
-export const createTaskDisplay = function(task){
+export const createTaskDisplay = function(task){ //passes in new Task object
     const taskDisplayContainer = document.createElement("div");
     taskDisplayContainer.classList.add("task-display-container");
-    //taskDisplayContainer.id = task.id;
+    taskDisplayContainer.id = task.id;
     taskDisplayContainer.dataset.projectId = task.projectId;
-    taskDisplayContainer.hidden = task.projectId !== activeProjectId;
+    taskDisplayContainer.hidden = task.projectId !== activeProjectId; // hides the Task container if data-project-id is not equal to the active Project clicked on
     taskDisplay.append(taskDisplayContainer);
 
     const taskTitleDisplay = document.createElement("div");
@@ -68,6 +67,28 @@ export const createTaskDisplay = function(task){
     taskPriorityDisplay.classList.add("priority-value");
     taskDisplayContainer.append(taskPriorityDisplay);
     taskPriorityDisplay.textContent = task.priority;
+
+    const taskDeleteButtonDiv = document.createElement("div");
+    taskDeleteButtonDiv.classList.add("delete-button-div");
+    taskDisplayContainer.append(taskDeleteButtonDiv);
+
+    const taskDeleteButton = document.createElement("button");
+    taskDeleteButton.id = "delete-task-button";
+    taskDeleteButtonDiv.append(taskDeleteButton);
+    taskDeleteButton.textContent = "DELETE";
+
+    taskDeleteButton.addEventListener("click", (event) => {
+
+       // if (!confirm("Are you sure you want to delete this task?")){
+
+           // return;
+       // }
+
+        const taskObject = arrOfTasks.findIndex((index) => index.id === task.projectId);
+        arrOfTasks.splice(taskObject, 1);
+        taskDisplayContainer.remove();
+        console.log(arrOfTasks);
+    })
 }
 
 

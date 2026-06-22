@@ -26,6 +26,20 @@ body {
   border-radius: 4px;
 }
 
+#delete-project-button{
+  width: 80px;
+  height: 20px;
+  background-color: rgb(3, 19, 24);
+  color: white;
+}
+
+#delete-project-button:active{
+  background-color: rgb(3, 49, 61);
+  color: white;
+  transform: scale(0.94);
+}
+
+
 .task-display-container {
   padding: 0.5em;
   margin-bottom: 0.5em;
@@ -33,5 +47,17 @@ body {
   border-radius: 4px;
 }
 
+#delete-task-button{
+  width: 80px;
+  height: 40px;
+  background-color: rgb(3, 19, 24);
+  color: white;
+}
+
+#delete-task-button:active{
+  background-color: rgb(3, 49, 61);
+  color: white;
+  transform: scale(0.94);
+}
 
 

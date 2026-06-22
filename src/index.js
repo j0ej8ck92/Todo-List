@@ -6,7 +6,7 @@ console.log(greeting);
 
 const firstTask = new Task("run", "three miles", "under 25 mins", "June 4, 2026", "medium");
 const secondTask = new Task("jog", "four miles", "under 50 mins", "June 18, 2026", "high");
-const thirdTask = new Task("walk", "ten miles", "under 6 hours", "July 10, 2026", "mild");
+//const thirdTask = new Task("walk", "ten miles", "under 6 hours", "July 10, 2026", "mild");
 
 
 console.log(firstTask);
@@ -15,7 +15,7 @@ console.log(firstTask.sayPriority());
 
 addTaskToArray(firstTask);
 addTaskToArray(secondTask);
-addTaskToArray(thirdTask);
+//addTaskToArray(thirdTask);
 
 console.log(arrOfTasks);
 
@@ -51,7 +51,9 @@ const projectSubmitButton = document.getElementById("project-submit");
 projectForm.addEventListener("submit",(event) => {
     event.preventDefault();
     createNewProject(projectTitle.value);
+    console.log(arrOfProjects);
     projectForm.reset();
+    
 
 });
 
@@ -63,10 +65,13 @@ taskForm.addEventListener("submit", (event) => {
         return;
     }
 
-    const project = arrOfProjects.find((proj) => proj.id === activeProjectId);
+    
+
+    const project = arrOfProjects.find((proj) => proj.id === activeProjectId); //In the array of projects it finds the id of the project that stricly matches the activeProjectId
     const newTask = new Task(taskTitle.value, taskDescription.value, taskNotes.value, taskDueDate.value, taskPriority.value);
     newTask.id = crypto.randomUUID();
-    newTask.projectId = project.id;
+    newTask.projectId = project.id; //once all projects are deleted can't produce task because of this
+
 
     addTaskToArray(newTask);
     project.addTasks(newTask);
@@ -81,7 +86,7 @@ firstTask.projectId = projectOne.id;
 //secondTask.id = crypto.randomUUID();
 secondTask.projectId = projectOne.id;
 
-createProjectDisplay(projectOne.project, projectOne.id);
+createProjectDisplay(projectOne.projectName, projectOne.id);
 createTaskDisplay(firstTask);
 createTaskDisplay(secondTask);
 setActiveProject(projectOne.id);
