@@ -26,6 +26,57 @@ const taskNotes = document.getElementById("task-notes");
 const taskDueDate = document.getElementById("task-due-date");
 const taskPriority = document.getElementById("task-priority");
 const taskSubmitButton = document.getElementById("task-submit");
+const wrapper = document.querySelector(".wrapper");
+console.log(wrapper);
+
+const taskFormJS = document.createElement("form");
+console.log(taskFormJS);
+
+
+function displayTaskFormJS(form){
+    
+    form.id = "task-form-js";
+    
+    
+    const taskFormData = [
+        {name: "task-title-JS", id: "task-title-JS", label: "Title", type: "text"},
+        {name: "task-description-JS", id: "task-description-JS", label: "Description", type: "text"},
+        {name: "task-notes-JS", id: "task-notes-JS", label: "Notes", type: "text"},
+        {name: "task-dates-JS", id: "task-date-JS", label: "Date", type: "datetime-local"},
+    ];
+
+    taskFormData.forEach(task => {
+        const formDiv = document.createElement("div");
+        formDiv.className = "form-div";
+        form.append(formDiv);
+
+        const label = document.createElement("label");
+        label.htmlFor = task.id;
+        label.textContent = task.label;
+        formDiv.append(label);
+
+        const input = document.createElement("input");
+
+        if (input.type !== "text"){
+
+            input.type = "datetimme-local";
+        }
+        input.type = task.type;
+        input.name = task.name;
+        input.id = task.id;
+        input.required = true;
+        formDiv.append(input);
+    })
+
+    return wrapper.append(form);
+
+
+}
+
+const showTaskForm = displayTaskFormJS(taskFormJS);
+
+
+    
 
 const getArr = arrOfTasks[1].sayPriority(); //useful for using methods within task Array of task class objects!
                                       
@@ -53,6 +104,7 @@ projectForm.addEventListener("submit",(event) => {
     createNewProject(projectTitle.value);
     console.log(arrOfProjects);
     projectForm.reset();
+    //displayTaskFormJS(taskFormJS);
     
 
 });
