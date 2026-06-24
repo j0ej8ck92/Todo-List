@@ -79,10 +79,10 @@ export const createTaskDisplay = function(task){ //passes in new Task object
 
     taskDeleteButton.addEventListener("click", (event) => {
 
-       // if (!confirm("Are you sure you want to delete this task?")){
+        if (!confirm("Are you sure you want to delete this task?")){
 
            // return;
-       // }
+        }
 
         const taskObject = arrOfTasks.findIndex((index) => index.id === task.projectId);
         arrOfTasks.splice(taskObject, 1);

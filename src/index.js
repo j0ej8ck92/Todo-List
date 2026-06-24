@@ -35,17 +35,18 @@ console.log(taskFormJS);
 
 function displayTaskFormJS(form){
     
-    form.id = "task-form-js";
-    
-    
+    form.id = "task-form-JS";
     const taskFormData = [
+
         {name: "task-title-JS", id: "task-title-JS", label: "Title", type: "text"},
         {name: "task-description-JS", id: "task-description-JS", label: "Description", type: "text"},
         {name: "task-notes-JS", id: "task-notes-JS", label: "Notes", type: "text"},
         {name: "task-dates-JS", id: "task-date-JS", label: "Date", type: "datetime-local"},
+        //{name: "task-priority-JS", id: "priority-JS", label: "Priority" : "select" }
     ];
 
     taskFormData.forEach(task => {
+
         const formDiv = document.createElement("div");
         formDiv.className = "form-div";
         form.append(formDiv);
@@ -68,10 +69,50 @@ function displayTaskFormJS(form){
         formDiv.append(input);
     })
 
+    const selectFormDiv = document.createElement("div");
+    selectFormDiv.className = "form-div";
+    form.append(selectFormDiv);
+
+    const selectLabel = document.createElement("label");
+    selectLabel.htmlFor = "task-priority-JS"
+    selectFormDiv.append(selectLabel);
+
+    const select = document.createElement("select");
+    select.id = "task-priority-JS";
+    select.name = "task-priority-JS";
+    selectFormDiv.append(select);
+
+    const selectPriorities = ["low", "medium", "high"];
+
+    selectPriorities.forEach(priority => {
+        const option = document.createElement("option");
+        option.value = priority;
+        option.textContent = priority;
+        select.append(option);
+
+
+    })
+
+
     return wrapper.append(form);
 
 
 }
+
+const taskFormData = [ ///Just using this to be able to display task objects for input
+
+        {name: "task-title-JS", id: "task-title-JS", label: "Title", type: "text"},
+        {name: "task-description-JS", id: "task-description-JS", label: "Description", type: "text"},
+        {name: "task-notes-JS", id: "task-notes-JS", label: "Notes", type: "text"},
+        {name: "task-dates-JS", id: "task-date-JS", label: "Date", type: "datetime-local"},
+    ];
+
+    console.log(taskFormData);
+    console.log(taskFormData[3].name); //able to use array index and dot notation for to get value of object properties!! lets go!!
+
+    
+
+
 
 const showTaskForm = displayTaskFormJS(taskFormJS);
 
@@ -129,6 +170,7 @@ taskForm.addEventListener("submit", (event) => {
     project.addTasks(newTask);
     createTaskDisplay(newTask);
     taskForm.reset();
+    console.log(arrOfTasks);
 })
 
 
