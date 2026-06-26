@@ -15,6 +15,17 @@ body {
   margin-top: 3em;
 }
 
+.project-task-panel {
+  padding: 1em;
+  margin-bottom: 1em;
+}
+
+.project-task-panel .task-form-js {
+  margin-bottom: 1em;
+  padding-bottom: 1em;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+}
+
 .project-display-container {
   cursor: pointer;
   padding: 0.5em;
