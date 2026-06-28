@@ -86,11 +86,7 @@ export const createProjectDisplay = function(project, id){ //passes in the .proj
         console.log(arrOfProjects);
         console.log(arrOfTasks);
         console.log(projectTaskPanel);
-
-        
     })
-
-    
 }
 
 

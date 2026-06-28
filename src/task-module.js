@@ -2,8 +2,6 @@ import { activeProjectId, arrOfProjects } from "./project-module.js";
 
 export const greeting = "Hello Odinite!";
 
-
-
 export class Task {
     constructor(title, description, notes, dueDate, priority, id){
         this.title = title;
@@ -34,7 +32,7 @@ export const addTaskToArray = function(task){
 
 export const taskDisplay = document.getElementById("display-task");
 
-export function createProjectTaskPanel(projectId) {
+export function createProjectTaskPanel(projectId) { //wrapper for project tasks
     const existingPanel = getProjectTaskPanel(projectId);
     if (existingPanel) {
         return existingPanel;
@@ -135,8 +133,8 @@ export function createTaskForm(projectId) {
         const project = arrOfProjects.find((proj) => proj.id === projectId);
         addTaskToArray(task);
         project.addTasks(task);
-        createTaskDisplay(task);
-        //appendTasktoPanel(taskContainer);
+        const newTask = createTaskDisplay(task);
+        appendTasktoPanel(newTask);
 
         form.reset();
     });
@@ -145,19 +143,24 @@ export function createTaskForm(projectId) {
     return form;
 }
 
-export const appendTasktoPanel = function(container){                  //needed to abstract this part out of create Task Display
-    const panel = createProjectTaskPanel(container.dataset.projectId);
-    panel.append(container);
-    //return panel;
+export const appendTasktoPanel = function(container){  //needed to abstract this part out of create Task Display
+    
+    if (container){                                                               
+        let panel = createProjectTaskPanel(container.dataset.projectId);
+        panel.append(container);
+        return panel;
+    } else {
+        console.warn('Element not found on the page.');
+    }
 }
 
 export const createTaskDisplay = function(task){ //passes in new Task object
-    const panel = createProjectTaskPanel(task.projectId);
+    //const panel = createProjectTaskPanel(task.projectId);
     const taskDisplayContainer = document.createElement("div");
     taskDisplayContainer.classList.add("task-display-container");
     taskDisplayContainer.id = task.id;
     taskDisplayContainer.dataset.projectId = task.projectId;
-    panel.append(taskDisplayContainer);
+    //panel.append(taskDisplayContainer);
     //end of appending the task display output being appended to the the project panel 
 
     const taskDisplayOutputs = [
@@ -255,16 +258,15 @@ export const createTaskDisplay = function(task){ //passes in new Task object
 
 export const updateTaskDisplay = function(oldContainer, newContainer){
 
-    oldContainer.remove();
-    return newContainer;
+    const update = oldContainer.replaceWith(newContainer);
+    return update;
 }
 
 export const editTaskForm = function(projectId, oldContainer) {
     const dialog = document.createElement("dialog")
     const dialogDiv = document.createElement("div");
     dialogDiv.className = "dialog-div";
-   
-
+    
     const form = document.createElement("form");
     form.classList.add("task-form-js");
     form.dataset.projectId = projectId;
@@ -355,9 +357,9 @@ export const editTaskForm = function(projectId, oldContainer) {
         const project = arrOfProjects.find((proj) => proj.id === projectId);
         addTaskToArray(task);
         project.addTasks(task);
-        const newContainer = createTaskDisplay(task);
-        //const updatedTask = updateTaskDisplay(oldContainer, newContainer)
-        appendTasktoPanel(newContainer);
+        const newTask = createTaskDisplay(task);
+        const updatedTask = updateTaskDisplay(oldContainer, newTask)
+        appendTasktoPanel(updatedTask);
         dialog.close();
         form.reset();
     });
