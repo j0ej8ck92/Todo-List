@@ -119,6 +119,9 @@ export function createTaskForm(projectId) {
         const formData = new FormData(event.target);
         const formProps = Object.fromEntries(formData);
 
+       // console.log(formData);
+       // console.log(formProps);
+
         const task = new Task(
             formProps["task-title-js"],
             formProps["task-description-js"],
@@ -133,11 +136,19 @@ export function createTaskForm(projectId) {
         addTaskToArray(task);
         project.addTasks(task);
         createTaskDisplay(task);
+        //appendTasktoPanel(taskContainer);
+
         form.reset();
     });
 
     panel.prepend(form);
     return form;
+}
+
+export const appendTasktoPanel = function(container){                  //needed to abstract this part out of create Task Display
+    const panel = createProjectTaskPanel(container.dataset.projectId);
+    panel.append(container);
+    //return panel;
 }
 
 export const createTaskDisplay = function(task){ //passes in new Task object
@@ -164,10 +175,18 @@ export const createTaskDisplay = function(task){ //passes in new Task object
         taskOutput.textContent = output.value;
         taskDisplayContainer.append(taskOutput);
 
+        if (output.name === "due-date-value"){
+            const dateObj = new Date(output.value);
+            const formattedDate =  dateObj.toLocaleString([], {
+                dateStyle: "short",
+                timeStyle: "short",
+            }).replace(",", "");
+            taskOutput.textContent = formattedDate;
+        }
     })
 
     const taskDeleteButtonDiv = document.createElement("div");
-    taskDeleteButtonDiv.classList.add("delete-button-div");
+    taskDeleteButtonDiv.className = "delete-button-div";
     taskDisplayContainer.append(taskDeleteButtonDiv);
 
     const taskDeleteButton = document.createElement("button");
@@ -187,6 +206,172 @@ export const createTaskDisplay = function(task){ //passes in new Task object
         taskDisplayContainer.remove();
         console.log(arrOfTasks);
     })
+
+    const taskEditButtonDiv = document.createElement("div");
+    taskEditButtonDiv.className = "edit-button-div";
+    taskDisplayContainer.append(taskEditButtonDiv);
+
+    const taskEditButton = document.createElement("button");
+    taskEditButton.id = "edit-task-button";
+    taskEditButtonDiv.append(taskEditButton);
+    taskEditButton.textContent = "Edit";
+
+    taskEditButton.addEventListener("click", (event) => {
+        editTaskForm(task.projectId, taskDisplayContainer);
+        //console.log(taskDisplayContainer);
+    
+    })
+
+
+    const taskCompleteDiv = document.createElement("div");
+    taskCompleteDiv.className = "task-complete";
+    taskDisplayContainer.append(taskCompleteDiv); 
+
+    const taskComplete = document.createElement("input");
+    taskComplete.type = "checkbox";
+    taskComplete.id = "task-complete";
+    taskComplete.name = "task-complete";
+    taskComplete.value = "task-complete";
+    taskComplete.checked = false;
+    taskCompleteDiv.append(taskComplete);
+
+    const taskCompleteLabel = document.createElement("label");
+    taskCompleteLabel.htmlFor = "task-complete";
+    taskCompleteLabel.textContent = "Complete";
+    taskCompleteDiv.append(taskCompleteLabel);
+
+    taskComplete.addEventListener("change", (event) => {
+        console.log(event.target);
+
+        if(event.target.checked === true){
+            taskDisplayContainer.classList.toggle("active");
+        } else {
+            taskDisplayContainer.classList.toggle("active");
+        }
+    })
+
+    return taskDisplayContainer;
+}
+
+export const updateTaskDisplay = function(oldContainer, newContainer){
+
+    oldContainer.remove();
+    return newContainer;
+}
+
+export const editTaskForm = function(projectId, oldContainer) {
+    const dialog = document.createElement("dialog")
+    const dialogDiv = document.createElement("div");
+    dialogDiv.className = "dialog-div";
+   
+
+    const form = document.createElement("form");
+    form.classList.add("task-form-js");
+    form.dataset.projectId = projectId;
+
+    const taskFormFields = [
+        { name: "task-title-js", id: `task-title-js-${projectId}`, label: "Title", type: "text" },                  //template literal adds project Id to the id of each field
+        { name: "task-description-js", id: `task-description-js-${projectId}`, label: "Description", type: "text" },
+        { name: "task-notes-js", id: `task-notes-js-${projectId}`, label: "Notes", type: "text" },
+        { name: "task-dates-js", id: `task-date-js-${projectId}`, label: "Date", type: "datetime-local" },
+    ];
+
+    taskFormFields.forEach((field) => {
+        const formDiv = document.createElement("div");
+        formDiv.className = "form-div";
+        form.append(formDiv);
+
+        const label = document.createElement("label");
+        label.htmlFor = field.id;
+        label.textContent = field.label;
+        formDiv.append(label);
+
+        const input = document.createElement("input");
+        input.type = field.type;
+        input.name = field.name;
+        input.id = field.id;
+        input.required = true;
+        formDiv.append(input);
+    });
+
+    const selectFormDiv = document.createElement("div");
+    selectFormDiv.className = "form-div";
+    form.append(selectFormDiv);
+
+    const selectLabel = document.createElement("label");
+    selectLabel.htmlFor = `task-priority-js-${projectId}`;
+    selectLabel.textContent = "Priority";
+    selectFormDiv.append(selectLabel);
+
+    const select = document.createElement("select");
+    select.id = `task-priority-js-${projectId}`;
+    select.name = "task-priority-js";
+    select.required = true;
+    selectFormDiv.append(select);
+
+    ["low", "medium", "high"].forEach((priority) => {
+        const option = document.createElement("option");
+        option.value = priority;
+        option.textContent = priority;
+        select.append(option);
+    });
+
+    const formSaveDiv = document.createElement("div");
+    formSaveDiv.className = "form-div";
+    form.append(formSaveDiv);
+
+    const taskFormSave = document.createElement("button");
+    taskFormSave.type = "submit";
+    taskFormSave.textContent = "Save";
+    formSaveDiv.append(taskFormSave);
+
+    const formCancelDiv = document.createElement("div");
+    formCancelDiv.className = "form-div";
+    form.append(formCancelDiv);
+
+    const taskFormCancel = document.createElement("button");
+    taskFormCancel.id = "cancel";
+    taskFormCancel.textContent = "Cancel";
+    formCancelDiv.append(taskFormCancel);
+
+    form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        const formProps = Object.fromEntries(formData);
+
+        console.log(formData);
+        console.log(formProps);
+
+        const task = new Task(
+            formProps["task-title-js"],
+            formProps["task-description-js"],
+            formProps["task-notes-js"],
+            formProps["task-dates-js"],
+            formProps["task-priority-js"],
+            crypto.randomUUID(),
+        );
+        task.projectId = projectId;
+
+        const project = arrOfProjects.find((proj) => proj.id === projectId);
+        addTaskToArray(task);
+        project.addTasks(task);
+        const newContainer = createTaskDisplay(task);
+        //const updatedTask = updateTaskDisplay(oldContainer, newContainer)
+        appendTasktoPanel(newContainer);
+        dialog.close();
+        form.reset();
+    });
+
+    taskFormCancel.addEventListener("click", () => {
+        dialog.close();
+    })
+
+    dialogDiv.append(form);
+    dialog.append(dialogDiv);
+    oldContainer.append(dialog);
+    dialog.showModal();
+
+    return form;
 }
 
 

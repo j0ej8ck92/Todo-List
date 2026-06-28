@@ -71,4 +71,8 @@ body {
   transform: scale(0.94);
 }
 
+.task-display-container.active{
+  background-color: rgb(155, 72, 72);
+}
+
 

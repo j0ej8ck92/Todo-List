@@ -1,5 +1,5 @@
 import "./styles.css";
-import {greeting, Task, createTaskDisplay, createTaskForm, addTaskToArray, arrOfTasks} from "./task-module.js";
+import {greeting, Task, createTaskDisplay, appendTasktoPanel, createTaskForm, addTaskToArray, arrOfTasks} from "./task-module.js";
 import {Project, createNewProject, createProjectDisplay, setActiveProject, activeProjectId, arrOfProjects} from "./project-module.js";
 
 console.log(greeting);
@@ -101,11 +101,14 @@ firstTask.projectId = projectOne.id;
 //secondTask.id = crypto.randomUUID();
 secondTask.projectId = projectOne.id;
 
-createProjectDisplay(projectOne.projectName, projectOne.id);
-displayTaskFormJS(projectOne.id);
-createTaskDisplay(firstTask);
-createTaskDisplay(secondTask);
-setActiveProject(projectOne.id);
+//createProjectDisplay(projectOne.projectName, projectOne.id);
+//displayTaskFormJS(projectOne.id);
+//const firstTaskContainer = createTaskDisplay(firstTask);
+//const secondTaskContainer = createTaskDisplay(secondTask);
+//appendTasktoPanel(firstTaskContainer);
+//appendTasktoPanel(secondTaskContainer);
+
+//setActiveProject(projectOne.id);
 
 
 

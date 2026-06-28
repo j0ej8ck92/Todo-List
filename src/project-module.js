@@ -28,16 +28,16 @@ export const createNewProject = function(projectTitleValue){
     return project;
 }
 
-export let activeProjectId = null; //used to toggle between active state of the project being clicked 
+export let activeProjectId = null; //used to toggle between active state of the specific project being clicked 
 
 export function setActiveProject(projectId) { //check Create Project function, passes in the data-project-id or dataset.projectID
-    activeProjectId = projectId; // creates a way set and disablee the projects that are being clicked 
+    activeProjectId = projectId; // creates a way to set and disable the projects that are being clicked 
 
     document.querySelectorAll(".project-display-container").forEach((element) => { //activate active class for project elements clicked
         element.classList.toggle("active", element.dataset.projectId === projectId); // checks to see if the element matches the passing of the argument stated in line 30
     });
 
-    document.querySelectorAll(".project-task-panel").forEach((element) => { //only have to hide the project panel because it wraps the task form and tasks created
+    document.querySelectorAll(".project-task-panel").forEach((element) => { //only have to hide the project panel because is the parent of task form and tasks created
         element.hidden = element.dataset.projectId !== projectId;
     });
 }
@@ -86,9 +86,11 @@ export const createProjectDisplay = function(project, id){ //passes in the .proj
         console.log(arrOfProjects);
         console.log(arrOfTasks);
         console.log(projectTaskPanel);
+
+        
     })
 
-    //const showTaskForm = displayTaskFormJS();
+    
 }
 
 
