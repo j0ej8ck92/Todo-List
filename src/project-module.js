@@ -86,7 +86,20 @@ export const createProjectDisplay = function(project, id){ //passes in the .proj
         console.log(arrOfProjects);
         console.log(arrOfTasks);
         console.log(projectTaskPanel);
+
+        removeStorageElementByValue("project-displays", projectTitleDisplay.textContent);
     })
+}
+
+export const removeStorageElementByValue = function(keyName, valueToRemove){
+    // 1 & 2. Get and parse the array from local storage
+    const existingArray = JSON.parse(localStorage.getItem(keyName)) || [];
+
+    // 3. Filter out the specific element
+    const updatedArray = existingArray.filter(item => item !== valueToRemove);
+
+    // 4. Save the updated array back to local storage
+    localStorage.setItem(keyName, JSON.stringify(updatedArray));
 }
 
 

@@ -1,4 +1,5 @@
 import { activeProjectId, arrOfProjects } from "./project-module.js";
+import { setStorage, getStorage } from "./index.js";
 
 export const greeting = "Hello Odinite!";
 
@@ -32,7 +33,7 @@ export const addTaskToArray = function(task){
 
 export const taskDisplay = document.getElementById("display-task");
 
-export function createProjectTaskPanel(projectId) { //wrapper for project tasks
+export const createProjectTaskPanel = function(projectId) { //wrapper for project tasks
     const existingPanel = getProjectTaskPanel(projectId);
     if (existingPanel) {
         return existingPanel;
@@ -46,7 +47,7 @@ export function createProjectTaskPanel(projectId) { //wrapper for project tasks
     return panel;
 }
 
-export function getProjectTaskPanel(projectId) {
+export const getProjectTaskPanel = function(projectId) {
     return taskDisplay.querySelector(`.project-task-panel[data-project-id="${projectId}"]`);
 }
 
@@ -118,7 +119,7 @@ export function createTaskForm(projectId) {
         const formProps = Object.fromEntries(formData);
 
        // console.log(formData);
-       // console.log(formProps);
+        console.log(formProps);
 
         const task = new Task(
             formProps["task-title-js"],
@@ -136,6 +137,9 @@ export function createTaskForm(projectId) {
         const newTask = createTaskDisplay(task);
         appendTasktoPanel(newTask);
 
+        setStorage();
+        //getStorage();
+
         form.reset();
     });
 
@@ -146,7 +150,7 @@ export function createTaskForm(projectId) {
 export const appendTasktoPanel = function(container){  //needed to abstract this part out of create Task Display
     
     if (container){                                                               
-        let panel = createProjectTaskPanel(container.dataset.projectId);
+        const panel = createProjectTaskPanel(container.dataset.projectId);
         panel.append(container);
         return panel;
     } else {
@@ -360,7 +364,11 @@ export const editTaskForm = function(projectId, oldContainer) {
         const newTask = createTaskDisplay(task);
         const updatedTask = updateTaskDisplay(oldContainer, newTask)
         appendTasktoPanel(updatedTask);
+
+
+        //setStorage(task);
         dialog.close();
+
         form.reset();
     });
 
