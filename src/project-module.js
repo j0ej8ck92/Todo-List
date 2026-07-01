@@ -42,6 +42,21 @@ export function setActiveProject(projectId) { //check Create Project function, p
     });
 }
 
+export const removeStorageElementByValue = function(keyName, valueToRemove){
+    // 1 & 2. Get and parse the array from local storage
+    const existingArray = JSON.parse(localStorage.getItem(keyName)) || [];
+    console.log(existingArray);
+
+    // 3. Filter out the specific element
+    const updatedArray = existingArray.filter(item => item.projectId !== valueToRemove);
+    console.log(updatedArray);
+    console.log(typeof existingArray[0]?.projectId, typeof valueToRemove);
+
+
+    // 4. Save the updated array back to local storage
+    localStorage.setItem(keyName, JSON.stringify(updatedArray));
+}
+
 const projectDisplay = document.getElementById("display-project");
 
 export const createProjectDisplay = function(project, id){ //passes in the .projectName and .id of Project Object
@@ -74,6 +89,9 @@ export const createProjectDisplay = function(project, id){ //passes in the .proj
     
            // return;
        // }
+
+        removeStorageElementByValue("project-displays", event.target.dataset.projectId);
+
     
         const projectElement = arrOfProjects.findIndex((element) => element.id === id);
         arrOfProjects.splice(projectElement, 1);
@@ -87,20 +105,24 @@ export const createProjectDisplay = function(project, id){ //passes in the .proj
         console.log(arrOfTasks);
         console.log(projectTaskPanel);
 
-        removeStorageElementByValue("project-displays", projectTitleDisplay.textContent);
+        //removeStorageElementByValue("project-displays", projectDisplayContainer.dataset.projectId);
     })
 }
 
-export const removeStorageElementByValue = function(keyName, valueToRemove){
+/*export const removeStorageElementByValue = function(keyName, valueToRemove){
     // 1 & 2. Get and parse the array from local storage
     const existingArray = JSON.parse(localStorage.getItem(keyName)) || [];
+    console.log(existingArray);
 
     // 3. Filter out the specific element
-    const updatedArray = existingArray.filter(item => item !== valueToRemove);
+    const updatedArray = existingArray.filter(item => item.projectId !== valueToRemove);
+    console.log(updatedArray);
+    console.log(typeof existingArray[0]?.projectId, typeof valueToRemove);
+
 
     // 4. Save the updated array back to local storage
     localStorage.setItem(keyName, JSON.stringify(updatedArray));
-}
+}*/
 
 
 

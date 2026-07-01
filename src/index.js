@@ -99,33 +99,40 @@ console.log(localStorage);
 
 export const setStorage = function(task){
 
-    const projectDisplays = document.querySelectorAll(".project-title-value");
+    const projectDisplays = document.querySelectorAll(".project-display-container");
     console.log(projectDisplays);
 
-    const projectData = Array.from(projectDisplays).map(data => {
-        return data.textContent;
+    const allProjectData = Array.from(projectDisplays).map(project => {
+        const projectKids = project.children;
+        return {
+            projectName: projectKids[0].textContent,
+            projectId: project.dataset.projectId,
+        }
     })
 
-    localStorage.setItem("project-displays", JSON.stringify(projectData)); //sets projects
+    localStorage.setItem("project-displays", JSON.stringify(allProjectData)); //sets projects
 
     
     const taskDisplays = document.querySelectorAll(".task-display-container");
 
     const allTaskData = Array.from(taskDisplays).map(task => {
-        const kids = task.children;
+        const taskKids = task.children;
 
         return {
-            title: kids[0].textContent,
-            description: kids[1].textContent,
-            notes: kids[2].textContent,
-            dueDate: kids[3].textContent,
-            priority: kids[4].textContent,
+            title: taskKids[0].textContent,
+            description: taskKids[1].textContent,
+            notes: taskKids[2].textContent,
+            dueDate: taskKids[3].textContent,
+            priority: taskKids[4].textContent,
+            projectId: task.dataset.projectId,
         }
         /*const childValues = Array.from(kids).map(kid => kid.textContent);
         return childValues.slice(0,-3);*/
     })
 
-    localStorage.setItem("project-tasks", JSON.stringify(allTaskData)); //sets tasks
+    console.log(allTaskData);
+
+    localStorage.setItem("task-displays", JSON.stringify(allTaskData)); //sets tasks
 
     console.log(localStorage);
 }
@@ -135,24 +142,18 @@ export const setStorage = function(task){
 
 export const getStorage = function(){
 
-    const savedProjects = JSON.parse(localStorage.getItem("project-displays"));
+    const projects = JSON.parse(localStorage.getItem("project-displays")) || [];
+    const savedProjects = projects.slice(1);
     console.log(savedProjects);
 
-    const coding = savedProjects.indexOf("Coding");
-
-    if (coding > -1){
-        savedProjects.splice(coding, 1);
-        console.log(savedProjects);
-    }
-
     savedProjects.forEach(project => {
-        const savedProject = createNewProject(project);
+        const savedProject = createNewProject(project.projectName);
         console.log(savedProject);
         return savedProject;
     })
 
-    const tasks = JSON.parse(localStorage.getItem("project-tasks"));
-    const [ , , ...savedTasks] = tasks;
+    const tasks = JSON.parse(localStorage.getItem("task-displays")) || [];
+    const savedTasks = tasks.slice(2);
     console.log(savedTasks);
 
     savedTasks.forEach(task => {
