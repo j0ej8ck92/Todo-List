@@ -1,10 +1,11 @@
 import { arrOfTasks, createTaskForm } from "./task-module.js";
+import { getStorage }  from "./index.js";
 
 export class Project {
-    constructor(projectName, arrOfProjectTasks = []){
+    constructor(projectName, arrOfProjectTasks = [], id){
         this.projectName = projectName;
         this.projectTasks = [...arrOfProjectTasks];
-        this.id = crypto.randomUUID();
+        this.id = id;
     }
 
     addTasks(tasks){
@@ -12,15 +13,23 @@ export class Project {
     }
 }
 
-Project.prototype.displayProject = function(){
-    const projectStringValue = this.project;
-    return projectStringValue
+Project.prototype.setProject = function(){
+    const projectId = Math.floor(Math.random() * 10)
+    return this.id = projectId;
 }
 
-export const arrOfProjects = [];
+Project.prototype.setTask = function(){
+        const change = arrOfTasks.find((task) => task.id === projectId);
+
+}
+
+const reloaded = false;
+
+export let arrOfProjects = [];
 
 export const createNewProject = function(projectTitleValue){
     const project = new Project(projectTitleValue);
+    project.setProject();
     arrOfProjects.push(project);
     createProjectDisplay(project.projectName, project.id); //grabs the object and passes in the properties of the project Object
     createTaskForm(project.id);
@@ -47,13 +56,17 @@ export const removeStorageElementByValue = function(keyName, valueToRemove){
     const existingArray = JSON.parse(localStorage.getItem(keyName)) || [];
     console.log(existingArray);
 
-    // 3. Filter out the specific element
-    const updatedArray = existingArray.filter(item => item.projectId !== valueToRemove);
+    /*existingArray.forEach((item, index) => {
+    console.log(`Item [${index}] match check:`, {
+        rawItemValue: `"${item.projectId}"`,
+        rawTargetValue: `"${valueToRemove}"`,
+        isExactlyEqual: item.projectId === valueToRemove
+    });
+    });*/
+
+    const updatedArray = existingArray.filter(item =>  item.projectId !== valueToRemove);
     console.log(updatedArray);
-    console.log(typeof existingArray[0]?.projectId, typeof valueToRemove);
 
-
-    // 4. Save the updated array back to local storage
     localStorage.setItem(keyName, JSON.stringify(updatedArray));
 }
 
@@ -90,7 +103,7 @@ export const createProjectDisplay = function(project, id){ //passes in the .proj
            // return;
        // }
 
-        removeStorageElementByValue("project-displays", event.target.dataset.projectId);
+        removeStorageElementByValue("project-displays", id);
 
     
         const projectElement = arrOfProjects.findIndex((element) => element.id === id);
@@ -105,24 +118,10 @@ export const createProjectDisplay = function(project, id){ //passes in the .proj
         console.log(arrOfTasks);
         console.log(projectTaskPanel);
 
-        //removeStorageElementByValue("project-displays", projectDisplayContainer.dataset.projectId);
+        
     })
 }
 
-/*export const removeStorageElementByValue = function(keyName, valueToRemove){
-    // 1 & 2. Get and parse the array from local storage
-    const existingArray = JSON.parse(localStorage.getItem(keyName)) || [];
-    console.log(existingArray);
-
-    // 3. Filter out the specific element
-    const updatedArray = existingArray.filter(item => item.projectId !== valueToRemove);
-    console.log(updatedArray);
-    console.log(typeof existingArray[0]?.projectId, typeof valueToRemove);
-
-
-    // 4. Save the updated array back to local storage
-    localStorage.setItem(keyName, JSON.stringify(updatedArray));
-}*/
 
 
 

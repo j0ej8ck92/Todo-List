@@ -384,4 +384,3 @@ export const editTaskForm = function(projectId, oldContainer) {
     return form;
 }
 
-
