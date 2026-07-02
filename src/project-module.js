@@ -2,7 +2,7 @@ import { arrOfTasks, createTaskForm } from "./task-module.js";
 import { getStorage }  from "./index.js";
 
 export class Project {
-    constructor(projectName, arrOfProjectTasks = [], id){
+    constructor(projectName, arrOfProjectTasks = [], id ){
         this.projectName = projectName;
         this.projectTasks = [...arrOfProjectTasks];
         this.id = id;
@@ -14,18 +14,14 @@ export class Project {
 }
 
 Project.prototype.setProject = function(){
-    const projectId = Math.floor(Math.random() * 10)
-    return this.id = projectId;
+    const projectId = String(Math.floor(Math.random() * 100));
+    return this.id = projectId
 }
 
-Project.prototype.setTask = function(){
-        const change = arrOfTasks.find((task) => task.id === projectId);
 
-}
 
-const reloaded = false;
 
-export let arrOfProjects = [];
+export const arrOfProjects = [];
 
 export const createNewProject = function(projectTitleValue){
     const project = new Project(projectTitleValue);
@@ -73,6 +69,7 @@ export const removeStorageElementByValue = function(keyName, valueToRemove){
 const projectDisplay = document.getElementById("display-project");
 
 export const createProjectDisplay = function(project, id){ //passes in the .projectName and .id of Project Object
+    
     const projectDisplayContainer = document.createElement("div");
     projectDisplayContainer.classList.add("project-display-container");
     projectDisplayContainer.dataset.projectId = id;

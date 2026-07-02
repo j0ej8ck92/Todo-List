@@ -138,8 +138,6 @@ export function createTaskForm(projectId) {
         appendTasktoPanel(newTask);
 
         setStorage();
-        //getStorage();
-
         form.reset();
     });
 

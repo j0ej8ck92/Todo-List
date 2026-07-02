@@ -14,6 +14,7 @@ const projectSubmitButton = document.getElementById("project-submit");
 const projects = JSON.parse(localStorage.getItem("project-displays")) || [];
 
 
+
 //if (projects.length === 0){
    /* const firstTask = new Task("run", "three miles", "under 25 mins", "June 4, 2026", "medium");
     const secondTask = new Task("jog", "four miles", "under 50 mins", "June 18, 2026", "high");
@@ -25,6 +26,7 @@ const projects = JSON.parse(localStorage.getItem("project-displays")) || [];
     //addTaskToArray(thirdTask);
     console.log(arrOfTasks);
     const projectOne = new Project("Coding");
+    projectOne.setProject();
     arrOfProjects.push(projectOne);
     projectOne.addTasks(firstTask);
     projectOne.addTasks(secondTask);
@@ -41,7 +43,7 @@ const projects = JSON.parse(localStorage.getItem("project-displays")) || [];
     const appendFirstTask = appendTasktoPanel(firstTaskContainer);
     const appendSecondTask = appendTasktoPanel(secondTaskContainer);
     setActiveProject(projectOne.id);
-    */
+   */ 
 
 
 export function displayTaskFormJS(projectId) {
@@ -56,11 +58,8 @@ console.log(arrOfTasks[1].notes);
 
 projectForm.addEventListener("submit",(event) => {
     event.preventDefault();
-    
-
     createNewProject(projectTitle.value);
     console.log(arrOfProjects);
-    projectForm.reset();
     console.log(arrOfTasks);
     setStorage();
     projectForm.reset(); //keep  this at the bottom of your event listeners!
@@ -82,9 +81,8 @@ export const setStorage = function(task){
         }
     })
 
-    localStorage.setItem("project-displays", JSON.stringify(allProjectData)); //sets projects
-
-    
+    const setProjects = localStorage.setItem("project-displays", JSON.stringify(allProjectData)); //sets projects
+   
     const taskDisplays = document.querySelectorAll(".task-display-container");
 
     const allTaskData = Array.from(taskDisplays).map(task => {
@@ -104,29 +102,27 @@ export const setStorage = function(task){
     console.log(allTaskData);
 
     localStorage.setItem("task-displays", JSON.stringify(allTaskData)); //sets tasks
-
-    console.log(localStorage);
 }
 
-    
 
+function restoreProject(projectName, projectId) {
+    const project = new Project(projectName, [], projectId);
+    arrOfProjects.push(project);
+    createProjectDisplay(project.projectName, project.id);
+    createTaskForm(project.id);
+    return project;
+}
 
-export function getStorage(){
-
+function getStorage() {
     const projects = JSON.parse(localStorage.getItem("project-displays")) || [];
-    console.log(projects);
-
-    projects.forEach(project => {
-        const savedProject = createNewProject(project.projectName);
-        console.log(savedProject);
-        return savedProject;
-    })
+    console.log("Saved projects from localStorage:", projects);
+    projects.forEach((project) => {
+        restoreProject(project.projectName, project.projectId);
+    });
 
     const tasks = JSON.parse(localStorage.getItem("task-displays")) || [];
-    console.log(tasks);
-
-    tasks.forEach(savedTask => {
-
+   
+    tasks.forEach((savedTask) => {
         const task = new Task(
             savedTask.title,
             savedTask.description,
@@ -135,26 +131,30 @@ export function getStorage(){
             savedTask.priority
         );
         task.projectId = savedTask.projectId;
-
-        console.log(arrOfProjects);
-
         
-        //const project = arrOfProjects.find((proj) => proj.id === projectId);
+        const project = arrOfProjects.find(
+            (proj) => proj.id === savedTask.projectId
+        );
+
+        if (!project) {
+            console.warn("No project found for task:", savedTask);
+            return;
+        }
+
         addTaskToArray(task);
-        //project.addTasks(task);
-        //project.addTasks(task);
-        console.log(task);
+        project.addTasks(task);
         const newTask = createTaskDisplay(task);
         appendTasktoPanel(newTask);
-        return appendTasktoPanel(newTask);
-    })
+    });
+
+    if (arrOfProjects.length > 0) {
+        setActiveProject(arrOfProjects[0].id);
+    }
 }
 
+getStorage();
 
-    getStorage();
-    
 
-//localStorage.clear();
 
  
 
